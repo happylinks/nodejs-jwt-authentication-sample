@@ -4,7 +4,8 @@ var logger          = require('morgan'),
     express         = require('express'),
     errorhandler    = require('errorhandler'),
     dotenv          = require('dotenv'),
-    bodyParser      = require('body-parser');
+    bodyParser      = require('body-parser'),
+    cookieParser    = require('cookie-parser');
 
 var app = express();
 
@@ -16,7 +17,11 @@ dotenv.load();
 // new version of line
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({
+  credentials: true,
+  origin: 'http://localhost:3000'
+}));
 
 app.use(function(err, req, res, next) {
   if (err.name === 'StatusError') {

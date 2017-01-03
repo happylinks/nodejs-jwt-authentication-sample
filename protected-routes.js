@@ -6,7 +6,12 @@ var express = require('express'),
 var app = module.exports = express.Router();
 
 var jwtCheck = jwt({
-  secret: config.secret
+  secret: config.secret,
+  // Important
+  getToken: function (req) {
+    const token = req.cookies.authorization || req.headers.authorization;
+    return token.substring(7); // Remove "Bearer "
+  },
 });
 
 app.use('/api/protected', jwtCheck);
