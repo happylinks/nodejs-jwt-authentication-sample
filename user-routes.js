@@ -8,8 +8,8 @@ var app = module.exports = express.Router();
 // XXX: This should be a database of users :).
 var users = [{
   id: 1,
-  username: 'gonto',
-  password: 'gonto'
+  username: 'admin',
+  password: 'admin'
 }];
 
 function createToken(user) {
@@ -82,7 +82,19 @@ app.post('/sessions/create', function(req, res) {
     return res.status(401).send("The username or password don't match");
   }
 
-  res.status(201).send({
-    id_token: createToken(user)
+  const token = createToken(user);
+
+  res.cookie('authorization', token, {
+    maxAge: 900000,
+    httpOnly: true,
   });
+
+  res.status(201).send({
+    id_token: token,
+  });
+});
+
+app.post('/sessions/destroy', (req, res) => {
+  res.clearCookie('authorization');
+  res.status(200).json({ status: 'ok' });
 });

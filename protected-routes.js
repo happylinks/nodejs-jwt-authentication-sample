@@ -9,8 +9,8 @@ var jwtCheck = jwt({
   secret: config.secret,
   // Important
   getToken: function (req) {
-    const token = req.cookies.authorization || req.headers.authorization;
-    return token.substring(7); // Remove "Bearer "
+    const token = req.cookies.authorization;
+    return token;
   },
 });
 
